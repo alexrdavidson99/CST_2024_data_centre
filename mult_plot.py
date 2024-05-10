@@ -17,7 +17,7 @@ def process_section_data(section_data, section_index):
     return new_section_name, filtered_df
 
 # Define file path
-file_path = "C:/Users/lexda/Downloads/phase_pace_sey_pram.txt"
+file_path = "C:/Users/lexda/Downloads/SEY_3.5_to_3.8_x_v_z.txt"
 
 # Initialize a list to store data frames for each section
 data_frames = []
@@ -55,14 +55,24 @@ with open(file_path, 'r') as file:
 
 
 plt.figure(figsize=(10, 6))  
+list = [1, 2, 3, 4, 5]
+SEY= [3.5, 3.6, 3.7, 3.8]
+numner_of_electrons = []
 for section_index, (section_name, df) in enumerate(data_frames, start=1):
-    print(len(df.index), len(df["Value"]))
-    plt.hist2d(df.index, df["Value"], label=f'01({section_index})', bins=100, cmap='viridis')
+    print(len(df.index), list[section_index-1])
+    #plt.plot(list[section_index-1],len(df.index), label=f'SEY={(section_index/10)3.5}')
+    #plt.hist(df["Value"], bins=50, label=f'SEY={-((section_index/10)-3.9):.1f}', alpha=0.5, log=True )
+    #plt.scatter(df.index, df["Value"], label=f'01({section_index})', alpha=0.5 )
+    
+    numner_of_electrons.append(len(df.index))
 
+print(reversed(list[1:5]))
+plt.plot(SEY, numner_of_electrons,  label="Electrons")
+plt.yscale('log')
 # Customize x-axis to display time in datetime format
 plt.title("Power vs Time for 5 pixels")
-plt.xlabel("Time")
-plt.ylabel("power^1/2 (watts)")
+plt.xlabel("position (um)")
+plt.ylabel("Events")
 plt.grid(True)
 plt.legend()
 
