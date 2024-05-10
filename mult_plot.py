@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-
+import numpy as np
+import scipy
 
 def process_section_data(section_data, section_index):
     df = pd.DataFrame(section_data, columns=["Time (ns)", "Value"])
@@ -60,21 +61,29 @@ SEY= [3.5, 3.6, 3.7, 3.8]
 numner_of_electrons = []
 for section_index, (section_name, df) in enumerate(data_frames, start=1):
     print(len(df.index), list[section_index-1])
-    #plt.plot(list[section_index-1],len(df.index), label=f'SEY={(section_index/10)3.5}')
-    #plt.hist(df["Value"], bins=50, label=f'SEY={-((section_index/10)-3.9):.1f}', alpha=0.5, log=True )
+    
+    plt.hist(df["Value"], bins=50, label=f'SEY={-((section_index/10)-3.9):.1f}', alpha=0.5, log=True )
     #plt.scatter(df.index, df["Value"], label=f'01({section_index})', alpha=0.5 )
     
     numner_of_electrons.append(len(df.index))
 
-print(reversed(list[1:5]))
-plt.plot(SEY, numner_of_electrons,  label="Electrons")
-plt.yscale('log')
-# Customize x-axis to display time in datetime format
-plt.title("Power vs Time for 5 pixels")
+plt.title("Electron distribution in the x direction at different SEY values")
 plt.xlabel("position (um)")
 plt.ylabel("Events")
-plt.grid(True)
 plt.legend()
+
+
+
+plt.figure(figsize=(10, 6))
+plt.scatter(SEY, numner_of_electrons,  label="Electrons")
+
+plt.yscale('log')
+plt.xlabel("SEY")
+plt.ylabel("Number of electrons")
+plt.title("Number of electrons at different SEY values")
+# Customize x-axis to display time in datetime format
+
+plt.grid(True)
 
 plt.tight_layout()
 plt.show()
