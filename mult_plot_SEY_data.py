@@ -1,24 +1,16 @@
 import pandas as pd
-from scipy import signal
 import matplotlib.pyplot as plt
-
-def butter_lowpass_filter(data, order=4):
-    cutoff_freq = 5  # Cutoff frequency in Hz
-    fs = 10000  # Sampling frequency in Hz
-    nyquist_freq = 0.5 * fs
-    normalized_cutoff = cutoff_freq / nyquist_freq
-    b, a = signal.butter(order, normalized_cutoff, btype='low')
-    return signal.lfilter(b, a, data)
-
+import numpy as np
+import scipy
 
 def process_section_data(section_data, section_index):
     df = pd.DataFrame(section_data, columns=["Time (ns)", "Value"])
     df.set_index('Time (ns)', inplace=True)
     data = df["Value"]
-    filtered_data = butter_lowpass_filter(data, order=4)
+    #filtered_data = butter_lowpass_filter(data, order=4)
    
     # Create DataFrame for filtered data
-    filtered_df = pd.DataFrame({"Value": filtered_data}, index=df.index)
+    filtered_df = pd.DataFrame({"Value": data}, index=df.index)
     
     # Format section name
     new_section_name = f"pixel {section_index:.1f}"
@@ -26,8 +18,8 @@ def process_section_data(section_data, section_index):
     return new_section_name, filtered_df
 
 # Define file path
-#file_path = "C:/Users/lexda/Downloads/4_nodes_0.7ns.txt"
-file_path = "C:/Users/lexda/VsProjects/CST_2024_data_center/cst_data/parameter_sweep_voltage/signal_v_time_5_pixels.txt"
+file_path = "C:/Users/lexda/Downloads/SEY_3.5_to_3.8_x_v_z.txt"
+
 # Initialize a list to store data frames for each section
 data_frames = []
 
@@ -46,7 +38,7 @@ with open(file_path, 'r') as file:
             
             # Extract section name from comment line
             section_name = line.strip().replace('#', '', 1).strip()
-            print(section_name)
+            #print(section_name)
         else:
             # Parse data lines and append to current section data
             parts = line.strip().split()
@@ -64,15 +56,35 @@ with open(file_path, 'r') as file:
 
 
 plt.figure(figsize=(10, 6))  
+list = [1, 2, 3, 4, 5]
+SEY= [3.5, 3.6, 3.7, 3.8]
+numner_of_electrons = []
 for section_index, (section_name, df) in enumerate(data_frames, start=1):
-    plt.plot(df.index, df["Value"], label=f'01({section_index})')
+    print(len(df.index), list[section_index-1])
+    
+    plt.hist(df["Value"], bins=50, label=f'SEY={-((section_index/10)-3.9):.1f}', alpha=0.5, log=True )
+    #plt.scatter(df.index, df["Value"], label=f'01({section_index})', alpha=0.5 )
+    
+    numner_of_electrons.append(len(df.index))
 
-# Customize x-axis to display time in datetime format
-plt.title("Power vs Time for 5 pixels")
-plt.xlabel("Time")
-plt.ylabel("power^1/2 (watts)")
-plt.grid(True)
+plt.title("Electron distribution in the x direction at different SEY values")
+plt.xlabel("position (um)")
+plt.ylabel("Events")
 plt.legend()
+
+
+
+plt.figure(figsize=(10, 6))
+plt.scatter(SEY, numner_of_electrons,  label="Electrons")
+
+plt.yscale('log')
+plt.xlabel("SEY")
+plt.ylabel("Number of electrons")
+plt.title("Number of electrons at different SEY values")
+# Customize x-axis to display time in datetime format
+
+plt.grid(True)
 
 plt.tight_layout()
 plt.show()
+

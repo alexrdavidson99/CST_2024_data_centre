@@ -1,33 +1,19 @@
 import pandas as pd
-from scipy import signal
 import matplotlib.pyplot as plt
-
-def butter_lowpass_filter(data, order=4):
-    cutoff_freq = 5  # Cutoff frequency in Hz
-    fs = 10000  # Sampling frequency in Hz
-    nyquist_freq = 0.5 * fs
-    normalized_cutoff = cutoff_freq / nyquist_freq
-    b, a = signal.butter(order, normalized_cutoff, btype='low')
-    return signal.lfilter(b, a, data)
-
+import numpy as np
+import scipy
 
 def process_section_data(section_data, section_index):
-    df = pd.DataFrame(section_data, columns=["Time (ns)", "Value"])
-    df.set_index('Time (ns)', inplace=True)
-    data = df["Value"]
-    filtered_data = butter_lowpass_filter(data, order=4)
-   
-    # Create DataFrame for filtered data
-    filtered_df = pd.DataFrame({"Value": filtered_data}, index=df.index)
+    df = pd.DataFrame(section_data, columns=["x", "z"])
     
     # Format section name
     new_section_name = f"pixel {section_index:.1f}"
     
-    return new_section_name, filtered_df
+    return new_section_name, df
 
 # Define file path
-#file_path = "C:/Users/lexda/Downloads/4_nodes_0.7ns.txt"
-file_path = "C:/Users/lexda/VsProjects/CST_2024_data_center/cst_data/parameter_sweep_voltage/signal_v_time_5_pixels.txt"
+file_path = "C:/Users/lexda/Downloads/paricles_sweep_500_to_1200v.txt"
+
 # Initialize a list to store data frames for each section
 data_frames = []
 
@@ -46,14 +32,14 @@ with open(file_path, 'r') as file:
             
             # Extract section name from comment line
             section_name = line.strip().replace('#', '', 1).strip()
-            print(section_name)
+            #print(section_name)
         else:
             # Parse data lines and append to current section data
             parts = line.strip().split()
             if len(parts) >= 2:
-                time_ns = float(parts[0])
-                value = float(parts[1])
-                section_data.append((time_ns, value))
+                x = float(parts[0])
+                z = float(parts[1])
+                section_data.append((x, z))
 
     # Process the last section after end of file
     if section_data:
@@ -64,15 +50,27 @@ with open(file_path, 'r') as file:
 
 
 plt.figure(figsize=(10, 6))  
-for section_index, (section_name, df) in enumerate(data_frames, start=1):
-    plt.plot(df.index, df["Value"], label=f'01({section_index})')
+list = [1, 2, 3, 4, 5,6,7,8,9,10]
 
-# Customize x-axis to display time in datetime format
-plt.title("Power vs Time for 5 pixels")
-plt.xlabel("Time")
-plt.ylabel("power^1/2 (watts)")
-plt.grid(True)
+numner_of_electrons = []
+for section_index, (section_name, df) in enumerate(data_frames, start=1):
+    print(len(df.index), list[section_index-1])
+    
+    
+    #plt.hist2d(df["x"], df["z"], bins=50, label=f'pixel {list[section_index-1]}', alpha=0.5)
+    if section_index == 2 or section_index == 9:
+        #plt.scatter(df["x"], df["z"], label=f'pixel {list[section_index-1]}', alpha=0.5)
+        plt.hist(df["z"], bins=50, label=f'{section_index}', alpha=0.5) #log=True )
+    
+    numner_of_electrons.append(len(df.index))
+
+plt.title("Electron distribution in the x direction at different back gap voltages values")
+plt.xlabel("position (um)")
+plt.ylabel("Events")
 plt.legend()
+plt.savefig("C:/Users/lexda/VsProjects/CST_2024_data_center/cst_data/parameter_sweep_voltage/500_to_1200v.png")
+
+
+plt.grid(True)
 
 plt.tight_layout()
-plt.show()
