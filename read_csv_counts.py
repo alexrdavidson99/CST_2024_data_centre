@@ -13,7 +13,7 @@ def gaus(x, a, x0, sigma):
 
 
 # Path to the CSV file
-file_path = 'C:/Users/lexda/Downloads/ascii_export.csv'
+file_path = 'C:/Users/lexda/Downloads/ascii_export_one_pore.csv'
 
 # Initialize variables
 frame_events = {}
@@ -54,7 +54,7 @@ FWHM = -2.355 * popt[2]
 print(f'FWHM: {FWHM}')
 
 plt.plot(list(frame_events.keys()), list(frame_events.values()))
-plt.plot(x_gauss, y_gauss, label=f'Gaussian fit: FWHM = {FWHM:.2f} ns')
+#plt.plot(x_gauss, y_gauss, label=f'Gaussian fit: FWHM = {FWHM:.2f} ns')
 plt.xlabel('ns')
 plt.ylabel('Event count')
 plt.title('Time vs Event count')
