@@ -3,6 +3,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy
 
+
+
+
 def process_section_data(section_data, section_index):
     df = pd.DataFrame(section_data, columns=["Time (ns)", "Value"])
     df.set_index('Time (ns)', inplace=True)
@@ -19,7 +22,9 @@ def process_section_data(section_data, section_index):
 
 # Define file path
 #file_path = "C:/Users/lexda/Downloads/SEY_3.5_to_3.8_x_v_z.txt"
-file_path = "C:/Users/lexda/Downloads/750_1000v_covered_end_spoil.txt"
+#file_path = "C:/Users/lexda/Downloads/750_1000v_covered_end_spoil.txt"
+#file_path = "C:/Users/lexda/Downloads/750_1250v_covered_end_spoil_js_tex_mesh.txt"
+file_path = "C:/Users/lexda/Downloads/from_0.3_to_0.05_spoil_thinkness.txt"
 #file_path = "C:/Users/lexda/Downloads/one_mcp_height_200_to_50.txt"
 
 SEY_on = False
@@ -91,8 +96,8 @@ if SEY_on == True:
 
 else:
     plt.figure(figsize=(10, 6))  
-    list = [1, 2, 3, 4, 5,6]
-    votages= [1000,750,800,850,900,950]
+    list = [1, 2, 3, 4, 5,6,7,8,9,10,11,12,13]
+    votages= [650,700,750,800,850,900,950,1050,1100,1150,1200,1250,1300]
     numner_of_electrons = []
     for section_index, (section_name, df) in enumerate(data_frames, start=1):
         print(len(df.index), list[section_index-1])
@@ -108,7 +113,7 @@ else:
     plt.legend()
     plt.figure(figsize=(10, 6))
     plt.scatter(votages, numner_of_electrons,  label="Electrons")
-    #plt.yscale('log')
+    plt.yscale('log')
     plt.xlabel("Voltage")
     plt.ylabel("Number of electrons")
     plt.title("Number of electrons at different voltage values")

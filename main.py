@@ -9,6 +9,8 @@ import os
 import sys
 from scipy import signal
 from scipy.integrate import quad
+from my_CST_functions import output_data_from_file
+
 
 # Load the data
 def f(x):
@@ -27,8 +29,6 @@ font = {'family': 'serif',
         'size': 16,
  
         }
-
-
 
 if __name__ == '__main__':
 
@@ -79,4 +79,6 @@ if __name__ == '__main__':
     plt.title("x vs y")
     plt.text(1000, 1500, r'1300 v 500 ', fontdict=font)
     plt.legend()
-    plt.show()
+    #plt.show()
+    
+
