@@ -79,6 +79,7 @@ if __name__ == '__main__':
     plt.title("x vs y")
     plt.text(1000, 1500, r'1300 v 500 ', fontdict=font)
     plt.legend()
-    #plt.show()
+    plt.show()
     
+
 

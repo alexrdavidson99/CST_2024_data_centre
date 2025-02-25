@@ -9,8 +9,8 @@ from my_CST_functions import output_data_from_file
 #file_path = "C:/Users/lexda/Downloads/paricles_sweep_500_to_1200v.txt"
 file_path = "C:/Users/lexda/Downloads/42_samples_same_paramters.txt"
 
-data_frames = output_data_from_file(file_path)
-
+data_frames, data_sums = output_data_from_file(file_path)
+print(data_sums)
 
 
 # Now `data_frames` contains tuples of (new_section_name, DataFrame) for each section with filtered data
